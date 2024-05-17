@@ -1,0 +1,18 @@
+
+<h1>Transaction Maps</h1>
+
+{% if transaction_maps %}
+    <ul>
+    {% for t in transaction_maps %}
+        <li>{{ t.name }} {{ t.description}} {{ t.type }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No transaction maps are available.</p>
+{% endif %}
+
+<form action="{% url 'transaction_map' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Insert Transaction Map">
+</form>

@@ -1,0 +1,18 @@
+
+<h1>Transaction Types</h1>
+
+{% if transaction_types %}
+    <ul>
+    {% for t in transaction_types %}
+        <li>{{ t.name }} {{ t.description}} {{ t.category }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No transaction types are available.</p>
+{% endif %}
+
+<form action="{% url 'transaction_type' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Insert Transaction Type">
+</form>

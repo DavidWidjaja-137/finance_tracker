@@ -1,0 +1,19 @@
+
+<h1>Accounts</h1>
+
+{% if all_accounts %}
+    <ul>
+    {% for account in all_accounts %}
+        <li>{{ account.name }} {{ account.description}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No accounts are available.</p>
+{% endif %}
+
+<form action="{% url 'account' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Insert Account">
+</form>
+

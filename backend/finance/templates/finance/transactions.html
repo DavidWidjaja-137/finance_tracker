@@ -1,0 +1,18 @@
+
+<h1>Transaction</h1>
+
+{% if transactions %}
+    <ul>
+    {% for t in transactions %}
+        <li>{{ t.date }} {{ t.account.name}} {{ t.mapping.name }} {{ t.mapping.category.name }} {{ amount }} {{ flow }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No transactions are available.</p>
+{% endif %}
+
+<form action="{% url 'transaction' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Insert Transaction">
+</form>
