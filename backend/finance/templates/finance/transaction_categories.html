@@ -1,18 +1,32 @@
+{% extends "./base.html" %}
 
-<h1>Transaction Categories</h1>
+{% block content %}
 
-{% if transaction_categories %}
-    <ul>
-    {% for t in transaction_categories %}
-        <li>{{ t.name }} {{ t.description}}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No transaction categories are available.</p>
-{% endif %}
+<h2>Insert Transaction Category</h2>
 
 <form action="{% url 'transaction_category' %}" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Insert Transaction Category">
 </form>
+
+<h2>Transaction Categories</h2>
+
+{% if transaction_categories %}
+    <table>
+        <tr>
+            <th scope="col">Transaction Name</th>
+            <th scope="col">Transaction Description</th>
+        </tr>
+        {% for t in transaction_categories %}
+            <tr>
+                <td>{{ t.name }}</td>
+                <td>{{ t.description }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No transaction categories are available.</p>
+{% endif %}
+
+{% endblock %}

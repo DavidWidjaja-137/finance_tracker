@@ -1,18 +1,40 @@
+{% extends "./base.html" %}
 
-<h1>Transaction</h1>
+{% block content %}
 
-{% if transactions %}
-    <ul>
-    {% for t in transactions %}
-        <li>{{ t.date }} {{ t.account.name}} {{ t.mapping.name }} {{ t.mapping.category.name }} {{ amount }} {{ flow }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No transactions are available.</p>
-{% endif %}
+<h2>Insert Transaction</h2>
 
 <form action="{% url 'transaction' %}" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Insert Transaction">
 </form>
+
+<h2>Transactions</h2>
+
+{% if transactions %}
+    <table>
+        <tr>
+            <th scope="col">Transaction Date</th>
+            <th scope="col">Transaction Account Name</th>
+            <th scope="col">Transaction Name</th>
+            <th scope="col">Transaction Category</th>
+            <th scope="col">Transaction Amount</th>
+            <th scope="col">Transaction Flow</th>
+        </tr>
+        {% for t in transactions %}
+            <tr>
+                <td>{{ t.date }}</td>
+                <td>{{ t.account.name }}</td>
+                <td>{{ t.mapping.name }}</td>
+                <td>{{ t.mapping.type.name }}</td>
+                <td>{{ t.amount }}</td>
+                <td>{{ t.flow }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No transactions are available.</p>
+{% endif %}
+
+{% endblock %}

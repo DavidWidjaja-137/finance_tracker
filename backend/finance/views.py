@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
-from django.template import loader
-from django.forms import ModelForm
+from django.forms import ModelForm, SelectDateWidget
 
 from finance.models import (
     Account,
@@ -39,6 +38,9 @@ class TransactionForm(ModelForm):
     class Meta:
         model = Transaction
         fields = ["date", "account", "mapping", "amount", "flow"]
+        widgets = {
+            "date": SelectDateWidget(),
+        }
 
 
 # Create your views here.

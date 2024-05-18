@@ -1,18 +1,35 @@
+{% extends "./base.html" %}
 
-<h1>Transaction Maps</h1>
+{% block content %}
 
-{% if transaction_maps %}
-    <ul>
-    {% for t in transaction_maps %}
-        <li>{{ t.name }} {{ t.description}} {{ t.type }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No transaction maps are available.</p>
-{% endif %}
+<h2>Insert Transaction Map</h2>
 
 <form action="{% url 'transaction_map' %}" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Insert Transaction Map">
 </form>
+
+<h2>Transaction Maps</h2>
+
+{% if transaction_maps %}
+    <table>
+        <tr>
+            <th scope="col">Transaction Name</th>
+            <th scope="col">Transaction Description</th>
+            <th scope="col">Transaction Type</th>
+        </tr>
+        {% for t in transaction_maps %}
+            <tr>
+                <td>{{ t.name }}</td>
+                <td>{{ t.description }}</td>
+                <td>{{ t.type }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No transaction maps are available.</p>
+{% endif %}
+
+
+{% endblock %}
