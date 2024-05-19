@@ -13,6 +13,7 @@ def create_default_accounts(apps, schema_editor):
     Account.objects.get_or_create(name="SCOTIABANK_SAVINGS", description="Scotiabank Savings Account")
     Account.objects.get_or_create(name="VANCITY_CHEQUING", description="Vancity Chequing Account")
     Account.objects.get_or_create(name="VANCITY_CREDIT", description="Vancity Credit Card Account")
+    Account.objects.get_or_create(name="VANCITY_SAVINGS", description="Vancity Savings Account")
     Account.objects.get_or_create(name="CREDENTIAL_ASSET_MANAGEMENT", description="Credential Asset Management Account")
 
 
@@ -258,7 +259,7 @@ def create_initial_transaction_mappings(apps, schema_editor):
             for type, names in types.items():
                 for name in names:
                     TransactionCategory.objects.get_or_create(
-                        name=name, description="NA",
+                        name=name, description="Initial transaction mapping set",
                         type=TransactionType.objects.get(name=type)
                     )
 

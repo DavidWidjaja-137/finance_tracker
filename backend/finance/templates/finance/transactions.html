@@ -6,8 +6,14 @@
 
 <form action="{% url 'transaction' %}" method="post">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Insert Transaction">
+    <fieldset>
+        <label for="start">Start month:</label>
+        <input type="month" id="start" name="start" min="2017-01" value="2024-01" />
+
+        <label for="start">End month:</label>
+        <input type="month" id="end" name="end" min="2027-01" value="2024-02" />
+    </fieldset>
+    <input type="submit" value="Import Transactions">
 </form>
 
 <h2>Transactions</h2>

@@ -1,6 +1,8 @@
+from datetime import date, datetime
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
-from django.forms import ModelForm, SelectDateWidget
+from django.forms import ModelForm, SelectDateWidget, Form
 
 from finance.models import (
     Account,
@@ -9,6 +11,7 @@ from finance.models import (
     TransactionMap,
     Transaction
 )
+from finance.importer.importer import import_transactions
 
 class AccountForm(ModelForm):
     class Meta:
@@ -41,7 +44,6 @@ class TransactionForm(ModelForm):
         widgets = {
             "date": SelectDateWidget(),
         }
-
 
 # Create your views here.
 
@@ -133,17 +135,20 @@ def transaction(request: HttpRequest) -> HttpResponse:
 
     if request.method == "POST":
 
-        form = TransactionForm(request.POST)
+        start = datetime.strptime(request.POST["start"], '%Y-%m').date()
+        end = datetime.strptime(request.POST["end"], '%Y-%m').date()
 
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect("/finance/transaction")
+        import_transactions(start, end)
+
+        return HttpResponseRedirect("/finance/transaction")
         
     else:
+        accounts = Account.objects.all()
         transactions = Transaction.objects.all()
         context = {
             "transactions": transactions,
-            "form": TransactionForm()
+            "accounts": accounts
+
         }
 
         return render(request, "finance/transactions.html", context)
