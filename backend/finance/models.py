@@ -2,6 +2,7 @@ from django.db import models
 
 # create database models(like an ORM) here
 
+
 class Account(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=200)
@@ -10,6 +11,7 @@ class Account(models.Model):
 
         return self.name
 
+
 class TransactionCategory(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=200)
@@ -17,6 +19,7 @@ class TransactionCategory(models.Model):
     def __str__(self):
 
         return self.name
+
 
 class TransactionType(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -37,9 +40,11 @@ class TransactionMap(models.Model):
 
         return self.name
 
+
 class TransactionFlow(models.TextChoices):
     INFLOW = "INFLOW"
     OUTFLOW = "OUTFLOW"
+
 
 class Transaction(models.Model):
     date = models.DateField()

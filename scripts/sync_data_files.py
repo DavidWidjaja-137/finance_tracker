@@ -5,39 +5,41 @@ import boto3
 
 
 def get_s3_filenames(bucket: str, prefix: str):
-    paginator = client.get_paginator('list_objects_v2')
+    paginator = client.get_paginator("list_objects_v2")
     paginator_iterator = paginator.paginate(Bucket=bucket.name, Prefix=prefix)
 
     keys = []
     for result in paginator_iterator:
-        if result is None or result.get('Contents') is None or len(result.get('Contents')) == 0:
+        if result is None or result.get("Contents") is None or len(result.get("Contents")) == 0:
             return []
-        for content in result.get('Contents'):
-            new_key = Path(content.get('Key')).relative_to(prefix)
+        for content in result.get("Contents"):
+            new_key = Path(content.get("Key")).relative_to(prefix)
             keys.append(os.path.join(prefix, new_key))
     return keys
 
+
 def get_local_filenames(location: str, prefix: str):
-    
+
     filepath = Path(os.path.join(location, prefix))
     valid_filenames = []
     for path, subdirs, files in os.walk(filepath):
         for name in files:
             local_file = Path(os.path.join(path, name)).relative_to(filepath)
-            if Path(name).suffix in ['.json', '.csv']:
+            if Path(name).suffix in [".json", ".csv"]:
                 valid_filenames.append(os.path.join(prefix, local_file))
     return valid_filenames
 
-if __name__ == '__main__':
 
-    client = boto3.client('s3')
-    s3 = boto3.resource('s3')
-    bucket = s3.Bucket('personal-data-dashboard.david-pw.com')
+if __name__ == "__main__":
 
-    local_location = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+    client = boto3.client("s3")
+    s3 = boto3.resource("s3")
+    bucket = s3.Bucket("personal-data-dashboard.david-pw.com")
 
-    local_filenames = get_local_filenames(local_location, 'data') + get_local_filenames(local_location, 'metadata')
-    remote_filenames = get_s3_filenames(bucket, 'data') + get_s3_filenames(bucket, 'metadata')
+    local_location = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
+
+    local_filenames = get_local_filenames(local_location, "data") + get_local_filenames(local_location, "metadata")
+    remote_filenames = get_s3_filenames(bucket, "data") + get_s3_filenames(bucket, "metadata")
     filename_local_only = list(set(local_filenames).difference(set(remote_filenames)))
     filename_remote_only = list(set(remote_filenames).difference(set(local_filenames)))
 
