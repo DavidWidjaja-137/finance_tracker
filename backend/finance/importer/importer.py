@@ -96,7 +96,7 @@ def import_transaction_from_scotiabank_chequing(row: list[str], month_start: dat
 
     transaction_flow = OUTFLOW if amount < 0 else INFLOW
 
-    create_transaction(date, month_start, month_end, transaction_name, "SCOTIABANK_CREDIT", amount, transaction_flow)
+    create_transaction(date, month_start, month_end, transaction_name, "SCOTIABANK_CHEQUING", amount, transaction_flow)
 
 
 def import_transaction_from_scotiabank_savings(row: list[str], month_start: date, month_end: date):
@@ -116,7 +116,7 @@ def import_transaction_from_credential_asset_management(row: list[str], month_st
 
     transaction_flow = INFLOW if amount > 0 else OUTFLOW
 
-    create_transaction(date, month_start, month_end, transaction_name, "SCOTIABANK_CREDIT", amount, transaction_flow)
+    create_transaction(date, month_start, month_end, transaction_name, "CREDENTIAL_ASSET_MANAGEMENT", amount, transaction_flow)
 
 
 def import_transaction_from_ctfs_credit(row: list[str], month_start: date, month_end: date):
@@ -126,7 +126,7 @@ def import_transaction_from_ctfs_credit(row: list[str], month_start: date, month
 
     transaction_flow = OUTFLOW if amount > 0 else INFLOW
 
-    create_transaction(date, month_start, month_end, transaction_name, "SCOTIABANK_CREDIT", amount, transaction_flow)
+    create_transaction(date, month_start, month_end, transaction_name, "CTFS_CREDIT", amount, transaction_flow)
 
 
 def import_transaction_from_account(row: list[str], statement_source: str, month_start: date, month_end: date):
@@ -168,7 +168,9 @@ def import_transactions_from_local_file(statement_source: str, file_month: date,
 def import_transactions_from_source(statement_source: str, start: date, end: date):
 
     # delete all transactions for the month first
-    Transaction.objects.filter(account__name__exact=statement_source).filter(date__range=(start, end)).delete()
+    deleted, _ = Transaction.objects.filter(account__name=statement_source, date__range=(start, end)).delete()
+
+    print(f"Deleted from {statement_source}: {deleted}")
 
     import_transactions_from_local_file(statement_source, start - relativedelta(months=1), start, end)
 

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h2>Insert Transaction</h2>
+<h2>Import Transactions</h2>
 
 <form action="{% url 'transaction' %}" method="post">
     {% csrf_token %}
@@ -10,13 +10,44 @@
         <label for="start">Start month:</label>
         <input type="month" id="start" name="start" min="2017-01" value="2024-01" />
 
-        <label for="start">End month:</label>
+        <label for="end">End month:</label>
         <input type="month" id="end" name="end" min="2027-01" value="2024-02" />
     </fieldset>
     <input type="submit" value="Import Transactions">
 </form>
 
 <h2>Transactions</h2>
+
+<form action="{% url 'transaction' %}" method='get'>
+
+    <fieldset>
+        <!-- Search by transaction type or transaction category-->
+        <label for="transaction-category">Transaction Category:</label>
+        <select name='transaction_category_selector', id='transaction-category'>
+            <option value=""></option>
+            {% for t in transaction_category %}
+                <option value={{ t }}>{{ t.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="transaction-type">Transaction Type:</label>
+        <select name='transaction_type_selector', id='transaction-type'>
+            <option value=""></option>
+            {% for t in transaction_type %}
+                <option value={{ t }}>{{ t.name }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Search by start and end months -->
+        <label for="filter_start">Start month:</label>
+        <input type="month" id="filter_start" name="filter_start" min="2017-01" value="2024-01" />
+
+        <label for="filter_end">End month:</label>
+        <input type="month" id="filter_end" name="filter_end" min="2027-01" value="2024-02" />
+    </fieldset>
+
+    <input type="submit" value="Search for Transactions">
+</form>
 
 {% if transactions %}
     <table>
@@ -33,7 +64,7 @@
                 <td>{{ t.date }}</td>
                 <td>{{ t.account.name }}</td>
                 <td>{{ t.mapping.name }}</td>
-                <td>{{ t.mapping.type.name }}</td>
+                <td><pre>{{ t.mapping.type.name }}</pre></td>
                 <td>{{ t.amount }}</td>
                 <td>{{ t.flow }}</td>
             </tr>

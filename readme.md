@@ -3,10 +3,6 @@
 A simple finance tracker for personal savings, investments, and expenditures.
 
 ## Features in Development
-- I want to only display a filtered selection of transactions and transaction mappings. When a page
-is loaded, no transactions or mappings should be loaded. There should be a form to select appropriate
-filters. When the form is submitted, a GET request reloads the page with search parameters to load the
-appropriate records.
 - A single transaction mapping, when first created by a transaction, can be in an unreconciled state.
 Have a filtered list of all unreconciled parameters, which can be selected in a form. When the form is
 submitted, display all the transactions associated with that mapping. Another form allows the transaction

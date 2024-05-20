@@ -109,11 +109,28 @@ def transaction_map(request: HttpRequest) -> HttpResponse:
             form.save()
             return HttpResponseRedirect("/finance/transaction_map")
 
-    else:
-        transaction_maps = TransactionMap.objects.all()
-        context = {"transaction_maps": transaction_maps, "form": TransactionMapForm()}
+    elif request.method == "GET":
+
+        if 'transaction_type_selector' in request.GET:
+            transaction_type = request.GET["transaction_type_selector"]
+            transaction_maps = TransactionMap.objects.filter(type__name=transaction_type).all()
+        elif 'transaction_category_selector' in request.GET:
+            transaction_category = request.GET["transaction_category_selector"]
+            transaction_maps = TransactionMap.objects.filter(type__category__name=transaction_category).all()
+        else:
+            transaction_maps = []
+
+        context = {
+            "transaction_maps": transaction_maps,
+            "transaction_type": TransactionType.objects.all(),
+            "transaction_category": TransactionCategory.objects.all(),
+            "form": TransactionMapForm()
+        }
 
         return render(request, "finance/transaction_maps.html", context)
+    
+    else:
+        raise ValueError("Invalid request method.")
 
 
 def transaction(request: HttpRequest) -> HttpResponse:
@@ -127,9 +144,39 @@ def transaction(request: HttpRequest) -> HttpResponse:
 
         return HttpResponseRedirect("/finance/transaction")
 
-    else:
-        accounts = Account.objects.all()
-        transactions = Transaction.objects.all()
-        context = {"transactions": transactions, "accounts": accounts}
+    elif request.method == "GET":
+
+        if request.GET:
+            filter_start = datetime.strptime(request.GET["filter_start"], "%Y-%m").date()
+            filter_end = datetime.strptime(request.GET["filter_end"], "%Y-%m").date()
+            transaction_type = (
+                request.GET["transaction_type_selector"] 
+                if "transaction_type_selector" in request.GET and request.GET["transaction_type_selector"] != "" 
+                else None
+            )
+            transaction_category = (
+                request.GET["transaction_category_selector"] 
+                if "transaction_category_selector" in request.GET and request.GET["transaction_category_selector"] != "" 
+                else None
+            )
+
+            if transaction_type:
+                transactions = Transaction.objects.filter(mapping__type__name=transaction_type).filter(date__range=(filter_start, filter_end)).all()
+            elif transaction_category:
+                transactions = Transaction.objects.filter(mapping__type__category__name=transaction_category).filter(date__range=(filter_start, filter_end)).all()
+            else:
+                transactions = []
+        else:
+            transactions = []
+
+        context = {
+            "transactions": transactions,
+            "transaction_type": TransactionType.objects.all(),
+            "transaction_category": TransactionCategory.objects.all(),
+        }
 
         return render(request, "finance/transactions.html", context)
+    
+    else:
+        raise ValueError("Invalid request method.")
+
