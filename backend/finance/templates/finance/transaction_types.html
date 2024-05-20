@@ -1,35 +1,38 @@
 {% extends "./base.html" %}
 
+{% block control_sidebar %}
+
+    <h2>Insert Transaction Type</h2>
+
+    <form action="{% url 'transaction_type' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Insert Transaction Type">
+    </form>
+
+{% endblock %}
+
 {% block content %}
-
-<h2>Insert Transaction Type</h2>
-
-<form action="{% url 'transaction_type' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Insert Transaction Type">
-</form>
 
 <h2>Transaction Types</h2>
 
-{% if transaction_types %}
-    <table>
-        <tr>
-            <th scope="col">Transaction Type Name</th>
-            <th scope="col">Transaction Type Description</th>
-            <th scope="col">Transaction Category</th>
-        </tr>
-        {% for t in transaction_types %}
+    {% if transaction_types %}
+        <table>
             <tr>
-                <td>{{ t.name }}</td>
-                <td>{{ t.description }}</td>
-                <td>{{ t.category }}</td>
+                <th scope="col">Transaction Type Name</th>
+                <th scope="col">Transaction Type Description</th>
+                <th scope="col">Transaction Category</th>
             </tr>
-        {% endfor %}
-    </table>
-{% else %}
-    <p>No transaction types are available. </p>
-{% endif %}
-
+            {% for t in transaction_types %}
+                <tr>
+                    <td>{{ t.name }}</td>
+                    <td>{{ t.description }}</td>
+                    <td>{{ t.category }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No transaction types are available. </p>
+    {% endif %}
 
 {% endblock %}

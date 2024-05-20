@@ -1,97 +1,84 @@
-html, body {
+html,
+body {
     height: 100%;
-  
+
     font-family: Arial, Helvetica, sans-serif;
     color: darkslategray;
-  }
-  
+}
+
 body {
-  background-color: white;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
+    background-color: white;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
-  background-color: lightsteelblue;
-  padding: 1vw;
-  flex: 0 0 auto;
+    background-color: lightsteelblue;
+    padding: 1vw;
+    display: block;
+}
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 1em;
+    text-align: center;
+    align-self: center;
+    padding: 1vw;
 }
 
 main {
-  background-color: white;
-  padding-top: 2vw;
-  padding-bottom: 2vw;
-  padding-left: 5vw;
-  padding-right: 5vw;
-  flex: 1 0 auto;
-}
-
-@media (orientation: landscape) {
-  main {
-      background-color: white;
-      padding-top: 2vw;
-      padding-bottom: 2vw;
-      padding-left: 25vw;
-      padding-right: 25vw;
-      flex: 1 0 auto;
-  }
-}
-
-footer {
-  background-color: lightsteelblue;
-  padding: 1vw;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    background-color: white;
+    padding-top: 2vw;
+    padding-bottom: 2vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
 }
 
 h1 {
-  margin: 0.5em;
-  font-size: xx-large;
+    margin: 0.5em;
+    font-size: xx-large;
+    text-align: center;
 }
 
 h2 {
-  margin: 0.5em;
-  font-size: x-large;
+    margin: 0.5em;
+    font-size: x-large;
 }
 
 p {
-  margin: 1em;
-  font-size: larger;
+    margin: 1em;
+    font-size: larger;
 }
 
 a:link {
-  color: darkslategray;
+    color: darkslategray;
 }
 
 a:visited {
-  color: darkslategray;
+    color: darkslategray;
 }
 
 table {
+    width: 100%;
     border-collapse: collapse;
     border: 2px solid darkslategray;
 }
 
 th,
 td {
-  border: 1px solid darkslategray;
+    border: 1px solid darkslategray;
 }
 
 pre {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 form {
-    width: 50%;
     align-self: center;
 }
 
@@ -100,25 +87,10 @@ input,
 textarea,
 select,
 button {
-  display: block;
-  width: 80%;
-  align-items: center;
-  padding: 5px;
-  margin: 5px;
-  box-sizing: border-box;
-}
-
-.navbar {
-    display: flex;
-    flex-direction: column;
+    display: block;
+    width: 80%;
     align-items: center;
-    justify-content: center;
-  }
-  
-  .navbar-items {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    gap: 1em;
-    text-align: center
-  }
-  
+    padding: 0.5em;
+    margin: 0.5em;
+    box-sizing: border-box;
+}

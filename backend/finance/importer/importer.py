@@ -116,7 +116,9 @@ def import_transaction_from_credential_asset_management(row: list[str], month_st
 
     transaction_flow = INFLOW if amount > 0 else OUTFLOW
 
-    create_transaction(date, month_start, month_end, transaction_name, "CREDENTIAL_ASSET_MANAGEMENT", amount, transaction_flow)
+    create_transaction(
+        date, month_start, month_end, transaction_name, "CREDENTIAL_ASSET_MANAGEMENT", amount, transaction_flow
+    )
 
 
 def import_transaction_from_ctfs_credit(row: list[str], month_start: date, month_end: date):

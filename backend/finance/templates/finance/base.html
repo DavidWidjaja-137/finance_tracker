@@ -5,20 +5,29 @@
 <head>
     <link rel="stylesheet" href="{% static 'finance/style.css' %}">
     <title>{% block title %}Finance Tracker{% endblock %}</title>
+    <link rel="icon" href="{% static 'finance/favicon.ico' %}">
 </head>
 
 <body>
-    <div class="navbar">
+    <header>
         <h1><a href="{% url 'account' %}">Finance Tracker</a></h1>
-        <nav class="navbar-items">
+        <nav>
             <a href="{% url 'account' %}">Accounts</a>
             <a href="{% url 'transaction_category' %}">Transaction Categories</a>
             <a href="{% url 'transaction_type' %}">Transaction Types</a>
             <a href="{% url 'transaction_map' %}">Transaction Maps</a>
             <a href="{% url 'transaction' %}">Transactions</a>
         </nav>
-    </div>
+    </header>
+    
+    <main>
+        <div id='control-column'>
+            {% block control_sidebar %}{% endblock %}
+        </div>
+        <div id='content-column'>
+            {% block content %}{% endblock %}
+        </div>
+    </main>
 
-    {% block content %}{% endblock %}
 </body>
 </html>
