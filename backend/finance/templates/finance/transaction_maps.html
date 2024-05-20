@@ -45,12 +45,75 @@
 {% endblock %}
 
 {% block content %}
-
-    <h2>Transaction Maps</h2>
-
-    <!-- A form to re-get this page with appropriate filters -->
-
     {% if transaction_maps %}
+        <h2>Transaction Maps</h2>
+        <!-- show a form to show what transactions are available for a given transaction map-->
+        <form action="{% url 'transaction_map' %}" method='get'>
+            <fieldset>
+                <label for="transaction-map">Select Transaction Map:</label>
+                <select name='transaction_map_selector', id='transaction-map'>
+                    {% for t in transaction_maps %}
+                        <option value={{ t.name|urlencode }}>{{ t.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name="transaction_type_selector", value={{ transaction_type_selected }}>
+                <input type="hidden" name="transaction_category_selector", value={{ transaction_category_selected }}>    
+            </fieldset>
+            <input type="submit" value="View Related Transactions">
+        </form>
+
+        {% if transactions %}
+            <table>
+                <tr>
+                    <th scope="col">Transaction Date</th>
+                    <th scope="col">Transaction Account Name</th>
+                    <th scope="col">Transaction Name</th>
+                    <th scope="col">Transaction Category</th>
+                    <th scope="col">Transaction Amount</th>
+                    <th scope="col">Transaction Flow</th>
+                </tr>
+                {% for t in transactions %}
+                    <tr>
+                        <td>{{ t.date }}</td>
+                        <td>{{ t.account.name }}</td>
+                        <td>{{ t.mapping.name }}</td>
+                        <td><pre>{{ t.mapping.type.name }}</pre></td>
+                        <td>{{ t.amount }}</td>
+                        <td>{{ t.flow }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No transactions are available.</p>
+        {% endif %}
+
+        <!-- show a form to post an update to a transaction -->
+        <form action="{% url 'transaction_map' %}" method='post'>
+            {% csrf_token %}
+            <fieldset>
+                <label for="transaction-map">Select Transaction Map:</label>
+                <select name='name', id='transaction-map'>
+                    {% for t in transaction_maps %}
+                        <option value="{{ t.name }}">{{ t.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="transaction-mapping-description">Transaction Description:</label>
+
+                <label for="transaction-type">Transaction Type:</label>
+                <select name='type', id='transaction-type'>
+                    {% for t in transaction_type %}
+                        <option value={{ t.id }}>{{ t.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <input type="text" id="transaction-mapping-description", name="description", value="Updated Transaction Mapping Description">
+
+            </fieldset>
+
+            <input type="submit" value="Update Transaction Type">
+        </form>
+
         <table>
             <tr>
                 <th scope="col">Transaction Name</th>

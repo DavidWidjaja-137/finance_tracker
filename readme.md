@@ -3,11 +3,6 @@
 A simple finance tracker for personal savings, investments, and expenditures.
 
 ## Features in Development
-- A single transaction mapping, when first created by a transaction, can be in an unreconciled state.
-Have a filtered list of all unreconciled parameters, which can be selected in a form. When the form is
-submitted, display all the transactions associated with that mapping. Another form allows the transaction
-mapping to be associated with a different transaction type, thus changing the categorization of all 
-associated transactions
 - Have a way to disentangle a transaction from a transaction mapping. For example, a restaurant can be 
 visited as both a social transaction and a family transaction. First, loosen the uniqueness constraint
 on the transaction mapping so that only the combination of (name, type) must be unique. Then, allow additional

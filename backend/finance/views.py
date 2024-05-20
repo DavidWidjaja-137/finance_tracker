@@ -1,4 +1,5 @@
 from datetime import datetime
+from urllib.parse import unquote
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
@@ -91,6 +92,8 @@ def transaction_category(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("/finance/transaction_category")
+        else:
+            raise ValueError("Form is invalid.")
 
     else:
         transaction_categories = TransactionCategory.objects.all()
@@ -103,24 +106,69 @@ def transaction_map(request: HttpRequest) -> HttpResponse:
 
     if request.method == "POST":
 
-        form = TransactionMapForm(request.POST)
+        transaction_type = str(request.POST["type"]) if "type" in request.POST and request.POST["type"] != "" else None
+        transaction_map_name = (
+            str(request.POST["name"]) if "name" in request.POST and request.POST["name"] != "" else None
+        )
+        transaction_description = (
+            str(request.POST["description"])
+            if "description" in request.POST and request.POST["description"] != ""
+            else None
+        )
 
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect("/finance/transaction_map")
+        if TransactionMap.objects.filter(name=transaction_map_name).exists():
+            map = TransactionMap.objects.get(name=transaction_map_name)
+            map.description = transaction_description
+            map.type = TransactionType.objects.get(id=transaction_type)
+            map.save()
+        else:
+            map = TransactionMap.objects.create(
+                name=transaction_map_name,
+                description=transaction_description,
+                type=TransactionType.objects.get(name=transaction_type),
+            )
+
+        return HttpResponseRedirect("/finance/transaction_map")
 
     elif request.method == "GET":
 
-        if "transaction_type_selector" in request.GET:
-            transaction_type = request.GET["transaction_type_selector"]
+        transaction_type = (
+            str(request.GET["transaction_type_selector"])
+            if "transaction_type_selector" in request.GET and request.GET["transaction_type_selector"] != ""
+            else None
+        )
+        transaction_category = (
+            str(request.GET["transaction_category_selector"])
+            if "transaction_category_selector" in request.GET and request.GET["transaction_category_selector"] != ""
+            else None
+        )
+
+        if transaction_type:
             transaction_maps = TransactionMap.objects.filter(type__name=transaction_type).all()
-        elif "transaction_category_selector" in request.GET:
-            transaction_category = request.GET["transaction_category_selector"]
+        elif transaction_category:
             transaction_maps = TransactionMap.objects.filter(type__category__name=transaction_category).all()
         else:
             transaction_maps = []
 
+        # check if a transaction map is included.
+        transaction_map_name = (
+            unquote(str(request.GET["transaction_map_selector"]))
+            if "transaction_map_selector" in request.GET and request.GET["transaction_map_selector"] != ""
+            else None
+        )
+
+        # get all associated transactions
+        transactions = (
+            Transaction.objects.filter(mapping__name=transaction_map_name).all() if transaction_map_name else None
+        )
+
+        # also return the transaction type selector and or transaction category selector
+
         context = {
+            "transactions": transactions,
+            "transaction_type_selected": transaction_type,
+            "transaction_category_selected": transaction_category,
+            "transaction_map_selected": transaction_map_name,
             "transaction_maps": transaction_maps,
             "transaction_type": TransactionType.objects.all(),
             "transaction_category": TransactionCategory.objects.all(),
