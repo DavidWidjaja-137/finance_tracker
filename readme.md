@@ -3,10 +3,13 @@
 A simple finance tracker for personal savings, investments, and expenditures.
 
 ## Features in Development
-- Add the ability to upload transaction files, with validation.
+
+- Refactor code into a solid MVC form
+- Use Django's authentication system to login to my personal site
+- generalize the logic for multiple users wooooooooo
+
 
 ## Potential Features
-- Use Django's authentication system.
 - Replace the SQLite database with a local postgres database
 - Replace the local postgres database with a managed postgres database
 - Deploy the site using AWS Elastic Beanstalk.

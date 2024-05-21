@@ -13,4 +13,6 @@ urlpatterns = [
     path("import_transaction/", views.import_transaction, name="import_transaction"),
     path("update_transaction/", views.update_transaction, name="update_transaction"),
     path("transaction/", views.transaction, name="transaction"),
+    path("transaction_file_downloader/", views.transaction_file_downloader, name="transaction_file_downloader"),
+    path("download_transaction_file/", views.download_transaction_file, name="download_transaction_file"),
 ]

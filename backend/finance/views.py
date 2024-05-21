@@ -1,11 +1,18 @@
 from datetime import datetime
+import os
+from pathlib import Path
 
+import boto3
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.forms import ModelForm, SelectDateWidget
 
 from finance.models import Account, TransactionType, TransactionCategory, TransactionMap, Transaction
 from finance.importer.importer import import_transactions
+
+client = boto3.client("s3")
+s3 = boto3.resource("s3")
+bucket = s3.Bucket("personal-data-dashboard.david-pw.com")
 
 
 class AccountForm(ModelForm):
@@ -331,3 +338,80 @@ def transaction(request: HttpRequest) -> HttpResponse:
 
     else:
         raise ValueError("Invalid request method.")
+
+
+def download_transaction_file(request: HttpRequest) -> HttpResponse:
+
+    if request.method == "POST":
+
+        file_date = (
+            datetime.strptime(request.POST["file_date"], "%Y-%m").date().isoformat()
+            if "file_date" in request.POST
+            else None
+        )
+
+        account = (
+            str(request.POST["transaction_account_selector"])
+            if "transaction_account_selector" in request.POST
+            else None
+        )
+
+        if file_date and account and request.FILES and request.FILES["file_upload"]:
+            key = os.path.join("data", account, file_date + ".csv")
+            print(key)
+            bucket.upload_fileobj(request.FILES["file_upload"].file, key)
+
+        return HttpResponseRedirect("/finance/transaction_file_downloader")
+    else:
+        raise ValueError("Invalid request method")
+
+
+def get_s3_filenames(prefix: str) -> list[str]:
+    paginator = client.get_paginator("list_objects_v2")
+    paginator_iterator = paginator.paginate(Bucket=bucket.name, Prefix=prefix)
+
+    keys = []
+    for result in paginator_iterator:
+        if result is None or result.get("Contents") is None or len(result.get("Contents")) == 0:
+            return []
+        for content in result.get("Contents"):
+            new_key = Path(content.get("Key")).relative_to(prefix)
+            keys.append(os.path.join(prefix, new_key))
+    return keys
+
+
+def transaction_file_downloader(request: HttpRequest) -> HttpResponse:
+
+    if request.method == "GET":
+
+        # check how many files are in the account
+        filter_start = (
+            datetime.strptime(request.GET["filter_start"], "%Y-%m").date() if "filter_start" in request.GET else None
+        )
+        filter_end = (
+            datetime.strptime(request.GET["filter_end"], "%Y-%m").date() if "filter_end" in request.GET else None
+        )
+        account = (
+            str(request.GET["transaction_account_selector"]) if "transaction_account_selector" in request.GET else None
+        )
+
+        # check on S3 how many files are there
+        if account:
+            keys = get_s3_filenames(os.path.join("data", account))
+        else:
+            keys = []
+
+        # filter the files according to the date range
+        filtered_keys = [
+            k
+            for k in keys
+            if filter_start <= datetime.strptime(os.path.basename(k).split(".")[0], "%Y-%m-%d").date() < filter_end
+        ]
+
+        context = {"transaction_accounts": Account.objects.all(), "transaction_files": filtered_keys}
+
+        return render(request, "finance/transaction_file_downloader.html", context)
+
+    else:
+
+        raise ValueError("Invalid request method")

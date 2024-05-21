@@ -1,0 +1,71 @@
+{% extends "./base.html" %}
+
+{% block control_sidebar %}
+
+    <h2> View Transaction Files</h2>
+
+    <!-- Add a menu to select an account. This lists all the files available in an S3 key of the same name -->
+    <form action="{% url 'transaction_file_downloader' %}", method="get">
+
+        <fieldset>
+            <label for='transaction_account_selector'>Transaction Account:</label>
+            <select name='transaction_account_selector', id='transaction-account'>
+                {% for a in transaction_accounts %}
+                    <option value={{ a }}>{{ a.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="filter_start">Start month:</label>
+            <input type="month" id="filter_start" name="filter_start" value="2024-01" />
+
+            <label for="filter_end">End month:</label>
+            <input type="month" id="filter_end" name="filter_end" value="2024-02" />
+        </fieldset>
+
+        <input type='submit', value="Search for Transaction Files">
+    </form>
+
+    <h2>Upload Transaction Files</h2>
+
+    <form enctype="multipart/form-data" action="{% url 'download_transaction_file' %}", method="post">
+        {% csrf_token %}
+
+        <fieldset>
+
+            <!-- Needs to have an account input, a month input, and a file uploader input-->
+            <label for='transaction_account_selector'>Transaction Account:</label>
+            <select name='transaction_account_selector', id='transaction-account'>
+                {% for a in transaction_accounts %}
+                    <option value={{ a }}>{{ a.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="file_date">File Date:</label>
+            <input type="month" id="file_date" name="file_date" value="2024-01" />
+
+            <label for="file_upload">File Upload:</label>
+            <input type="file", id="file_upload" name="file_upload", accept=".csv">
+
+        </fieldset>
+
+        <input type='submit', value="Upload a transaction file">
+
+    </form>
+
+{% endblock %}
+
+{% block content %}
+
+    <h2>View Transaction Files</h2>
+
+    {% if transaction_files %}
+        <ul>
+            {% for tf in transaction_files %}
+                <li>{{ tf }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p> No Transaction Files are available. </p>
+    {% endif %}
+
+{% endblock %}
