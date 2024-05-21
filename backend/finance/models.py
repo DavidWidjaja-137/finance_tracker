@@ -32,7 +32,7 @@ class TransactionType(models.Model):
 
 
 class TransactionMap(models.Model):
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
     type = models.ForeignKey(TransactionType, on_delete=models.PROTECT)
 

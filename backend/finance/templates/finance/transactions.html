@@ -4,7 +4,7 @@
 
 <h2>Import Transactions</h2>
 
-    <form action="{% url 'transaction' %}" method="post">
+    <form action="{% url 'import_transaction' %}" method="post">
         {% csrf_token %}
         <fieldset>
             <label for="start">Start month:</label>
@@ -21,16 +21,23 @@
     <form action="{% url 'transaction' %}" method='get'>
 
         <fieldset>
+            <!-- Search by account -->
+            <label for='transaction_account_selector'>Transaction Account:</label>
+            <select name='transaction_account_selector', id='transaction-account'>
+                <option value="All">All Accounts</option>
+                {% for a in transaction_accounts %}
+                    <option value={{ a }}>{{ a.name }}</option>
+                {% endfor %}
+            </select>
+
             <!-- Search by transaction type or transaction category-->
-            <label for="transaction-category">Transaction Category:</label>
+            <label for="transaction-category">Transaction Type or Category:</label>
             <select name='transaction_category_selector', id='transaction-category'>
                 <option value="">Select a Transaction Category</option>
                 {% for t in transaction_category %}
                     <option value={{ t }}>{{ t.name }}</option>
                 {% endfor %}
             </select>
-
-            <label for="transaction-type">Transaction Type:</label>
             <select name='transaction_type_selector', id='transaction-type'>
                 <option value="">Select a Transaction Type</option>
                 {% for t in transaction_type %}
@@ -48,6 +55,33 @@
 
         <input type="submit" value="Search for Transactions">
     </form>
+
+    <!-- If there are transactions, have a form to select and modify a transaction -->
+    {% if transactions %}
+        <h2>Update Transaction Type</h2>
+        <form action="{% url 'update_transaction' %}" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <!-- Select a transaction, select a transaction type-->
+                <label for="transaction">Select a Transaction:</label>
+                <select name='transaction_selector', id='transaction'>
+                    {% for t in transactions %}
+                        <option value={{ t.id }}>{{ t.date }}: {{ t.mapping.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="transaction-type">Updated Transaction Type:</label>
+                <select name='transaction_type_selector', id='transaction-type'>
+                    <option value="">Select a Transaction Type</option>
+                    {% for t in transaction_type %}
+                        <option value="{{ t.name }}">{{ t.name }}</option>
+                    {% endfor %}
+                </select>
+
+            </fieldset>
+            <input type="submit" value="Update Transaction Type">
+        </form>
+    {% endif %}
 
 {% endblock %}
 

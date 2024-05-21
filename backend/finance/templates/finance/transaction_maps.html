@@ -4,7 +4,7 @@
 
     <h2>Insert Transaction Map</h2>
 
-    <form action="{% url 'transaction_map' %}" method="post">
+    <form action="{% url 'insert_transaction_map' %}" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Insert Transaction Map">
@@ -35,7 +35,6 @@
     </form>
 
     <form action="{% url 'transaction_map' %}" method='get'>
-
         <fieldset>
             <!-- Search by transaction type or transaction category-->
             <label for="transaction-category">Transaction Category:</label>
@@ -64,7 +63,7 @@
                 <label for="transaction-map">Select Transaction Map:</label>
                 <select name='transaction_map_selector', id='transaction-map'>
                     {% for t in transaction_maps %}
-                        <option value="{{ t.name }}">{{ t.name }}</option>
+                        <option value="{{ t.id }}"><pre>{{ t.name }}</pre></option>
                     {% endfor %}
                 </select>
                 <input type="hidden" name="transaction_type_selector", value={{ transaction_type_selected }}>
@@ -77,14 +76,14 @@
     {% if transaction_maps %}
         <h2>Update Transaction Maps</h2>
         <!-- show a form to post an update to a transaction -->
-        <form action="{% url 'transaction_map' %}" method='post'>
+        <form action="{% url 'update_transaction_map' %}" method='post'>
             {% csrf_token %}
             <fieldset>
                 <label for="transaction-map">Select Transaction Map:</label>
-                <select name='name', id='transaction-map'>
+                <select name='id', id='transaction-map'>
                     <option value="">Select a Transaction Map</option>
                     {% for t in transaction_maps %}
-                        <option value="{{ t.name }}"><pre>{{ t.name }}</pre></option>
+                        <option value="{{ t.id }}"><pre>{{ t.name }}</pre></option>
                     {% endfor %}
                 </select>
 
