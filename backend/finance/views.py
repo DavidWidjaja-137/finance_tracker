@@ -106,27 +106,28 @@ def transaction_map(request: HttpRequest) -> HttpResponse:
 
     if request.method == "POST":
 
-        transaction_type = str(request.POST["type"]) if "type" in request.POST and request.POST["type"] != "" else None
+        transaction_type = str(request.POST["type"]) if "type" in request.POST and request.POST["type"] not in ["", "None"] else None
         transaction_map_name = (
-            str(request.POST["name"]) if "name" in request.POST and request.POST["name"] != "" else None
+            str(request.POST["name"]) if "name" in request.POST and request.POST["name"] not in ["", "None"] else None
         )
         transaction_description = (
             str(request.POST["description"])
-            if "description" in request.POST and request.POST["description"] != ""
+            if "description" in request.POST and request.POST["description"] not in ["", "None"]
             else None
         )
 
-        if TransactionMap.objects.filter(name=transaction_map_name).exists():
-            map = TransactionMap.objects.get(name=transaction_map_name)
-            map.description = transaction_description
-            map.type = TransactionType.objects.get(id=transaction_type)
-            map.save()
-        else:
-            map = TransactionMap.objects.create(
-                name=transaction_map_name,
-                description=transaction_description,
-                type=TransactionType.objects.get(name=transaction_type),
-            )
+        if transaction_type and transaction_map_name and transaction_description:
+            if TransactionMap.objects.filter(name=transaction_map_name).exists():
+                map = TransactionMap.objects.get(name=transaction_map_name)
+                map.description = transaction_description
+                map.type = TransactionType.objects.get(id=transaction_type)
+                map.save()
+            else:
+                map = TransactionMap.objects.create(
+                    name=transaction_map_name,
+                    description=transaction_description,
+                    type=TransactionType.objects.get(name=transaction_type),
+                )
 
         return HttpResponseRedirect("/finance/transaction_map")
 
@@ -134,14 +135,15 @@ def transaction_map(request: HttpRequest) -> HttpResponse:
 
         transaction_type = (
             str(request.GET["transaction_type_selector"])
-            if "transaction_type_selector" in request.GET and request.GET["transaction_type_selector"] != ""
+            if "transaction_type_selector" in request.GET and request.GET["transaction_type_selector"] not in ["", "None"]
             else None
         )
         transaction_category = (
             str(request.GET["transaction_category_selector"])
-            if "transaction_category_selector" in request.GET and request.GET["transaction_category_selector"] != ""
+            if "transaction_category_selector" in request.GET and request.GET["transaction_category_selector"] not in ["", "None"]
             else None
         )
+
 
         if transaction_type:
             transaction_maps = TransactionMap.objects.filter(type__name=transaction_type).all()
@@ -152,8 +154,8 @@ def transaction_map(request: HttpRequest) -> HttpResponse:
 
         # check if a transaction map is included.
         transaction_map_name = (
-            unquote(str(request.GET["transaction_map_selector"]))
-            if "transaction_map_selector" in request.GET and request.GET["transaction_map_selector"] != ""
+            str(request.GET["transaction_map_selector"])
+            if "transaction_map_selector" in request.GET and request.GET["transaction_map_selector"] not in ["", "None"]
             else None
         )
 

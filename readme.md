@@ -4,11 +4,20 @@ A simple finance tracker for personal savings, investments, and expenditures.
 
 ## Features in Development
 - Have a way to disentangle a transaction from a transaction mapping. For example, a restaurant can be 
-visited as both a social transaction and a family transaction. First, loosen the uniqueness constraint
-on the transaction mapping so that only the combination of (name, type) must be unique. Then, allow additional
-types to be associated to the same name. Create a form to filter for transactions from a combination of 
-account, date range, and type. Then, create a form to select a transaction and assign it to a new transaction 
+visited as both a social transaction and a family transaction. 
+
+First, loosen the uniqueness constraint
+on the transaction mapping so that only the combination of (name, type) must be unique. 
+
+Then, allow additional types to be associated to the same name. 
+
+Create a form to filter for transactions from a combination of 
+account, date range, and type. 
+
+Then, create a form to select a transaction and assign it to a new transaction 
 type. This creates an additional transaction mapping with the same name, but a different type.
+
+
 - Add the ability to upload transaction files, with validation.
 
 ## Potential Features

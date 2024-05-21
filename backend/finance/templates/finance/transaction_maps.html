@@ -18,8 +18,15 @@
             <!-- Search by transaction type or transaction category-->
             <label for="transaction-type">Transaction Type:</label>
             <select name='transaction_type_selector', id='transaction-type'>
+                    <option value="">Select Transaction Type</option>
                 {% for t in transaction_type %}
-                    <option value={{ t }}>{{ t.name }}</option>
+                    <option 
+                        value="{{ t }}" 
+                        {% if not transaction_category_selected and transaction_type_selected and t.name == transaction_type_selected %}
+                            selected=True
+                        {% endif %}>
+                        {{ t.name }}
+                    </option>
                 {% endfor %}
             </select>
         </fieldset>
@@ -33,8 +40,15 @@
             <!-- Search by transaction type or transaction category-->
             <label for="transaction-category">Transaction Category:</label>
             <select name='transaction_category_selector', id='transaction-category'>
+                <option value="">Select Transaction Category</option>
                 {% for t in transaction_category %}
-                    <option value={{ t }}>{{ t.name }}</option>
+                    <option
+                        value="{{ t }}"
+                        {% if not transaction_type_selected and transaction_category_selected and t.name == transaction_category_selected %}
+                            selected=True
+                        {% endif %}>
+                            {{ t.name }}
+                    </option>
                 {% endfor %}
             </select>
         </fieldset>
@@ -46,14 +60,31 @@
 
 {% block content %}
     {% if transaction_maps %}
-        <h2>Transaction Maps</h2>
+
+        <h2>View Transaction Maps</h2>
+        <table>
+            <tr>
+                <th scope="col">Transaction Name</th>
+                <th scope="col">Transaction Description</th>
+                <th scope="col">Transaction Type</th>
+            </tr>
+            {% for t in transaction_maps %}
+                <tr>
+                    <td><pre>{{ t.name }}</pre></td>
+                    <td>{{ t.description }}</td>
+                    <td>{{ t.type }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h2>View Transactions</h2>
         <!-- show a form to show what transactions are available for a given transaction map-->
         <form action="{% url 'transaction_map' %}" method='get'>
             <fieldset>
                 <label for="transaction-map">Select Transaction Map:</label>
                 <select name='transaction_map_selector', id='transaction-map'>
                     {% for t in transaction_maps %}
-                        <option value={{ t.name|urlencode }}>{{ t.name }}</option>
+                        <option value="{{ t.name }}">{{ t.name }}</option>
                     {% endfor %}
                 </select>
                 <input type="hidden" name="transaction_type_selector", value={{ transaction_type_selected }}>
@@ -87,47 +118,36 @@
             <p>No transactions are available.</p>
         {% endif %}
 
+        <h2>Update Transaction Maps</h2>
+
         <!-- show a form to post an update to a transaction -->
         <form action="{% url 'transaction_map' %}" method='post'>
             {% csrf_token %}
             <fieldset>
                 <label for="transaction-map">Select Transaction Map:</label>
                 <select name='name', id='transaction-map'>
+                    <option value="">Select a Transaction Map</option>
                     {% for t in transaction_maps %}
-                        <option value="{{ t.name }}">{{ t.name }}</option>
+                        <option value="{{ t.name }}"><pre>{{ t.name }}</pre></option>
                     {% endfor %}
                 </select>
 
-                <label for="transaction-mapping-description">Transaction Description:</label>
 
                 <label for="transaction-type">Transaction Type:</label>
                 <select name='type', id='transaction-type'>
+                    <option value="">Select a Transaction Type</option>
                     {% for t in transaction_type %}
                         <option value={{ t.id }}>{{ t.name }}</option>
                     {% endfor %}
                 </select>
 
+                <label for="transaction-mapping-description">Transaction Description:</label>
                 <input type="text" id="transaction-mapping-description", name="description", value="Updated Transaction Mapping Description">
 
             </fieldset>
 
             <input type="submit" value="Update Transaction Type">
         </form>
-
-        <table>
-            <tr>
-                <th scope="col">Transaction Name</th>
-                <th scope="col">Transaction Description</th>
-                <th scope="col">Transaction Type</th>
-            </tr>
-            {% for t in transaction_maps %}
-                <tr>
-                    <td><pre>{{ t.name }}</pre></td>
-                    <td>{{ t.description }}</td>
-                    <td>{{ t.type }}</td>
-                </tr>
-            {% endfor %}
-        </table>
     {% else %}
         <p>No transaction maps are available.</p>
     {% endif %}

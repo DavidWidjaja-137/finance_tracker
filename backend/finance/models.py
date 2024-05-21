@@ -36,6 +36,9 @@ class TransactionMap(models.Model):
     description = models.CharField(max_length=200)
     type = models.ForeignKey(TransactionType, on_delete=models.PROTECT)
 
+    class Meta:
+        unique_together = ["name", "type"]
+
     def __str__(self):
 
         return self.name
