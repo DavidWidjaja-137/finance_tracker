@@ -16,9 +16,10 @@ def create_transaction(
 
     if month_start <= d < month_end:
 
-        # check if a mapping exists
+        # check if a mapping exists.
+        # in the edge case that multiple transaction maps are available, just assign to the first one.
         if TransactionMap.objects.filter(name=transaction_name).exists():
-            map = TransactionMap.objects.get(name=transaction_name)
+            map = TransactionMap.objects.filter(name=transaction_name).first()
         else:
             map = TransactionMap.objects.create(
                 name=transaction_name,

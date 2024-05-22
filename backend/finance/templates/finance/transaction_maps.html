@@ -4,7 +4,7 @@
 
     <h2>Insert Transaction Map</h2>
 
-    <form action="{% url 'insert_transaction_map' %}" method="post">
+    <form action="{% url 'transaction_map' %}" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Insert Transaction Map">
