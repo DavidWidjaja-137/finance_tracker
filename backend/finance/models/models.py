@@ -55,8 +55,3 @@ class Transaction(models.Model):
     mapping = models.ForeignKey(TransactionMap, on_delete=models.PROTECT)
     amount = models.FloatField()
     flow = models.CharField(max_length=10, choices=TransactionFlow)
-
-
-class TestStuff(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.CharField(max_length=200)

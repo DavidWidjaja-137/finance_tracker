@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponseRedirect
 from django.views import View
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from finance.models import TransactionCategory
 from finance.models import TransactionCategoryForm
 
 
+@method_decorator(login_required, name="dispatch")
 class TransactionCategoryView(View):
     form_class = TransactionCategoryForm
     initial = {"key": "value"}

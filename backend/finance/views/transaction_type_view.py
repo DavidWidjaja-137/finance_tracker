@@ -4,11 +4,14 @@ import os
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.views import View
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from finance.models import TransactionType
 from finance.models import TransactionTypeForm
 
 
+@method_decorator(login_required, name="dispatch")
 class TransactionTypeView(View):
     form_class = TransactionTypeForm
     initial = {"key": "value"}

@@ -1,0 +1,6 @@
+{% extends "finance/base.html" %}
+
+{% block control_sidebar %}
+  <p>Logged out!</p>
+  <a href="{% url 'login'%}">Click here to login again.</a>
+{% endblock %}

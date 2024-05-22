@@ -3,10 +3,11 @@
 A simple finance tracker for personal savings, investments, and expenditures.
 
 ## Features in Development
-
-- Refactor code into a solid MVC form
-- Use Django's authentication system to login to my personal site
 - generalize the logic for multiple users wooooooooo
+
+
+each user should have a different set of everything. accounts, transactions, categories, types, maps.
+however, the transactions, categories, types and maps should be shared among
 
 
 ## Potential Features

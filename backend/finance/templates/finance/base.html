@@ -10,9 +10,20 @@
 
 <body>
     <header>
-        <h1><a href="{% url 'account' %}">Finance Tracker</a></h1>
+        <h1><a href="{% url 'transaction_account' %}">Finance Tracker</a></h1>
+        <div class='login'>
+            {% if user.is_authenticated %}
+                <p>Welcome, {{ user.get_username }}</p>
+                <form id="logout-form" method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link">Logout</button>
+                </form>
+           {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
+           {% endif %}
+        </div>
         <nav>
-            <a href="{% url 'account' %}">Accounts</a>
+            <a href="{% url 'transaction_account' %}">Accounts</a>
             <a href="{% url 'transaction_category' %}">Transaction Categories</a>
             <a href="{% url 'transaction_type' %}">Transaction Types</a>
             <a href="{% url 'transaction_map' %}">Transaction Maps</a>

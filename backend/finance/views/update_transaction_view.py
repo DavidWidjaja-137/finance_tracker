@@ -4,10 +4,13 @@ import os
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponseRedirect
 from django.views import View
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from finance.models import TransactionMap, TransactionType, Transaction
 
 
+@method_decorator(login_required, name="dispatch")
 class UpdateTransactionView(View):
 
     def post(self, request: HttpRequest):

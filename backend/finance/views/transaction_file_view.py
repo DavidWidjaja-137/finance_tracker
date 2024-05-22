@@ -4,11 +4,15 @@ from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.views import View
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
 
 from finance.models import Account
 from finance.s3_util import s3_util
 
 
+@method_decorator(login_required, name="dispatch")
 class TransactionFileView(View):
 
     def get(self, request: HttpRequest):

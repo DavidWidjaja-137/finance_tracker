@@ -55,6 +55,10 @@ p {
     font-size: larger;
 }
 
+a {
+    text-align: center;
+}
+
 a:link {
     color: darkslategray;
 }
@@ -94,4 +98,10 @@ button {
     padding: 0.25em;
     margin: 0.25em;
     box-sizing: border-box;
+}
+
+.login {
+    width: 20%;
+    margin: auto;
+    text-align: center;
 }

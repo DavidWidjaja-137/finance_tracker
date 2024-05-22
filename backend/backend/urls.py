@@ -20,4 +20,8 @@ from django.urls import path, include
 
 # register new django subapps here
 
-urlpatterns = [path("admin/", admin.site.urls), path("finance/", include("finance.urls"))]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("finance/", include("finance.urls")),
+    path("accounts/", include("django.contrib.auth.urls"), name="account"),
+]
