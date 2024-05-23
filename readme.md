@@ -2,51 +2,54 @@
 
 A simple finance tracker for personal savings, investments, and expenditures.
 
-## Features in Development
-- generalize the logic for multiple users 
-
----
-
-neither:
-- users should not be allowed to add new account types. only superusers and admin can do that.
-
----
-
-transaction categories and transaction types: how to handle?
-- these are not tied to any option-specific code, so users can handle it more easily
-- but, sensible defaults should be enabled universally for each user account
-
-same TransactionCategory and TransactionType tables.
-- add a nullable user foreign key. defaults are null, but when a user adds a new TransactionCategory
-or TransactionType, it is assigned under their name. Users can only filter for default records and 
-the records attached to their name.
-
----
-
-transactions and transaction maps should be wholly unique for each user.
-- add a user foreign key, make it non-nullable if possible.
-
-
-
-
-## Potential Features
+## Features In Progress
 - Replace the SQLite database with a local postgres database
 - Replace the local postgres database with a managed postgres database
 - Deploy the site using AWS Elastic Beanstalk.
-- Make the UI beautiful using a SPA framework like Vue
-- Create a mobile frontend for Android using the Android SDK.
 
-## Thoughts
+## Features in Discovery
+
+### Develop flashy new UI using React/React Native
+
+Make the UI beautiful using a SPA framework like Vue and create a mobile frontend for Android using the Android SDK, 
+or do it in React/React Native.
+
+### Add budgeting capability
+
 It isn't great that I can only get feedback on my finances at month's end. I want to check how my finances are
 on a day-to-day basis. I get receipts for my purchases, and insert them into the app as a kind of 
 'intermediate transaction', which are also associated with transaction types.
 
 I want to be able to see if I am definitely overbudget by the end of the month, or probably overbudget within the 
-month. THat means I need to set budgets. A 'default budget' is the one set on a category or subcategory when there is no
+month. That means I need to set budgets. A 'default budget' is the one set on a category or subcategory when there is no
 appropriate monthly target. A 'time budget' is one set for a specific year or month. More specific budgets override less
 specific budgets.
 
-Other questions I would like to answer:
+Create a budget model and a budget view. The budget has the fields:
+- name: what the budget is meant to do
+- description: what the budget is for
+- category: what category of spending does this budget go into?
+- amount: how much is this budget?
+- budget_type: what type of budget is this?
+- start_date
+- end_date
+- user: whose budget is this?
+
+For each user, create an 'intermediate transaction' view. Users can log and categorize intermediate purchases throughout
+the month, without the rigour of full transactions. 
+
+Create an IntermediateTransaction model and view, with the following fields:
+- name: what is this intermediate transaction?
+- date: when did this transaction happen?
+- type: what type is this transaction?
+- user: whose intermediate transaction is this?
+
+Then, whenever the budgeting page is get by a user, compare intermediate and full transactions with the budget model, for
+the time period, and display budgeted-vs-actual statistics.
+
+### Add capabiity to create virtual users with simulated financial scenarios.
+
+This will help me answer several questions, like:
 - If I had x kids, or have a mortgage for a house, or a savings or philantrophic goal, how much money will I need
 to earn to fulfil my combined obligations and goals?
 - If I was laid off or had to do a job with reduced pay, how much time do I have?
