@@ -3,11 +3,30 @@
 A simple finance tracker for personal savings, investments, and expenditures.
 
 ## Features in Development
-- generalize the logic for multiple users wooooooooo
+- generalize the logic for multiple users 
+
+---
+
+neither:
+- users should not be allowed to add new account types. only superusers and admin can do that.
+
+---
+
+transaction categories and transaction types: how to handle?
+- these are not tied to any option-specific code, so users can handle it more easily
+- but, sensible defaults should be enabled universally for each user account
+
+same TransactionCategory and TransactionType tables.
+- add a nullable user foreign key. defaults are null, but when a user adds a new TransactionCategory
+or TransactionType, it is assigned under their name. Users can only filter for default records and 
+the records attached to their name.
+
+---
+
+transactions and transaction maps should be wholly unique for each user.
+- add a user foreign key, make it non-nullable if possible.
 
 
-each user should have a different set of everything. accounts, transactions, categories, types, maps.
-however, the transactions, categories, types and maps should be shared among
 
 
 ## Potential Features

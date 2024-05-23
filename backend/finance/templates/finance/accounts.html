@@ -2,14 +2,6 @@
 
 {% block control_sidebar %}
 
-<h2>Insert Accounts</h2>
-
-<form action="{% url 'transaction_account' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Insert Account">
-</form>
-
 {% endblock %}
 
 {% block content %}

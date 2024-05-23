@@ -2,33 +2,50 @@ from datetime import datetime
 import os
 
 from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect
 from django.views import View
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from finance.models import TransactionType
-from finance.models import TransactionTypeForm
+from finance.models import TransactionType, TransactionCategory
 
 
-@method_decorator(login_required, name="dispatch")
-class TransactionTypeView(View):
-    form_class = TransactionTypeForm
-    initial = {"key": "value"}
-    template_name = "finance/transaction_types.html"
+class TransactionTypeView(LoginRequiredMixin, View):
+    login_url = "/accounts/login/"
 
     def get(self, request: HttpRequest):
 
-        transaction_types = TransactionType.objects.all()
-        context = {"transaction_types": transaction_types, "form": self.form_class(initial=self.initial)}
+        context = {
+            "transaction_types": TransactionType.objects.all(),
+            "transaction_categories": TransactionCategory.objects.all(),
+        }
 
-        return render(request, self.template_name, context)
+        print(f"GET TransactionTypeView: {request.user} {request.user.username} {request.user.is_authenticated}")
+
+        return render(request, "finance/transaction_types.html", context)
 
     def post(self, request: HttpRequest):
 
-        form = self.form_class(request.POST)
+        # get the results of the post
+        name = (
+            str(request.POST["name"]) if "name" in request.POST and request.POST["name"] not in ["", "None"] else None
+        )
+        description = (
+            str(request.POST["description"])
+            if "description" in request.POST and request.POST["description"] not in ["", "None"]
+            else None
+        )
+        category = (
+            int(request.POST["category"])
+            if "category" in request.POST and request.POST["category"] not in ["", "None"]
+            else None
+        )
 
-        if form.is_valid():
-            form.save()
+        if name and description and category:
+            TransactionType.objects.create(
+                name=name,
+                description=description,
+                category=TransactionCategory.objects.get(id=category),
+                user=request.user,
+            )
 
         return HttpResponseRedirect("/finance/transaction_type")

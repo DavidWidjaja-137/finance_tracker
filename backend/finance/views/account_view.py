@@ -19,11 +19,3 @@ class AccountView(View):
         context = {"all_accounts": all_accounts, "form": self.form_class(initial=self.initial)}
 
         return render(request, self.template_name, context)
-
-    def post(self, request: HttpRequest) -> HttpResponseRedirect:
-        form = self.form_class(request.POST)
-
-        if form.is_valid():
-            form.save()
-
-        return HttpResponseRedirect("/finance/transaction_account")
