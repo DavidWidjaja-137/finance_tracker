@@ -56,3 +56,4 @@ class Transaction(models.Model):
     mapping = models.ForeignKey(TransactionMap, on_delete=models.PROTECT)
     amount = models.FloatField()
     flow = models.CharField(max_length=10, choices=TransactionFlow)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)

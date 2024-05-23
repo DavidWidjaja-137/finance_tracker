@@ -17,6 +17,6 @@ class ImportTransactionView(View):
         start = datetime.strptime(request.POST["start"], "%Y-%m").date()
         end = datetime.strptime(request.POST["end"], "%Y-%m").date()
 
-        import_transactions(start, end)
+        import_transactions(start, end, request.user)
 
         return HttpResponseRedirect("/finance/transaction")
