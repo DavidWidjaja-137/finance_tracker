@@ -3,7 +3,6 @@
 A simple finance tracker for personal savings, investments, and expenditures.
 
 ## Features In Progress
-- Replace the SQLite database with a local postgres database
 - Replace the local postgres database with a managed postgres database
 - Deploy the site using AWS Elastic Beanstalk.
 
