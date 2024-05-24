@@ -8,3 +8,4 @@ from finance.views.transaction_map_view import TransactionMapView
 from finance.views.transaction_view import TransactionView
 from finance.views.update_transaction_map_view import UpdateTransactionMapView
 from finance.views.update_transaction_view import UpdateTransactionView
+from finance.views.sign_up_view import SignUpView

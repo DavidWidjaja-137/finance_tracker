@@ -12,6 +12,7 @@ from finance.views import (
     ImportTransactionView,
     TransactionView,
     TransactionFileView,
+    SignUpView
 )
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
     path("import_transaction/", ImportTransactionView.as_view(), name="import_transaction"),
     path("transaction/", TransactionView.as_view(), name="transaction"),
     path("transaction_file_downloader/", TransactionFileView.as_view(), name="transaction_file_downloader"),
+    path("signup/", SignUpView.as_view(), name="signup"),
 ]

@@ -1,0 +1,11 @@
+<!-- templates/registration/signup.html -->
+{% extends "finance/base.html" %}
+
+{% block control_sidebar %}
+  <h2>Sign up</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign Up</button>
+  </form>
+{% endblock %}
