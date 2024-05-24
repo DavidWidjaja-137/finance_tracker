@@ -29,10 +29,11 @@ class TransactionFileView(View):
         )
 
         # check on S3 how many files are there
-        if account:
-            keys = s3_util.get_s3_filenames(os.path.join("data", request.user.username, account))
-        else:
-            keys = []
+        keys = []
+        #if account:
+        #    keys = s3_util.get_s3_filenames(os.path.join("data", request.user.username, account))
+        #else:
+        #    keys = []
 
         # filter the files according to the date range
         filtered_keys = [
