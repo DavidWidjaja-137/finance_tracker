@@ -1,7 +1,8 @@
 *.sqlite3
-*.json
+test.initial_transaction_mappings.json
 
 __pycache__/
+.vscode/
 *.py[cod]
 
 data
