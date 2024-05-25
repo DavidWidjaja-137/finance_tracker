@@ -3,8 +3,6 @@
 A simple finance tracker for personal savings, investments, and expenditures.
 
 ## Features In Progress
-- Replace the local postgres database with a managed postgres database, from Heroku
-- Deploy the site using Heroku
 
 ## Features in Discovery
 
