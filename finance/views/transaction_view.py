@@ -23,12 +23,12 @@ class TransactionView(View):
             datetime.strptime(request.GET["filter_end"], "%Y-%m").date() if "filter_end" in request.GET else None
         )
         transaction_type = (
-            request.GET["transaction_type_selector"]
+            str(request.GET["transaction_type_selector"])
             if "transaction_type_selector" in request.GET and request.GET["transaction_type_selector"] != ""
             else None
         )
         transaction_category = (
-            request.GET["transaction_category_selector"]
+            str(request.GET["transaction_category_selector"])
             if "transaction_category_selector" in request.GET and request.GET["transaction_category_selector"] != ""
             else None
         )

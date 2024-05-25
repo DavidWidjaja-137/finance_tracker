@@ -20,3 +20,8 @@ def get_s3_filenames(prefix: str) -> list[str]:
             new_key = Path(content.get("Key")).relative_to(prefix)
             keys.append(os.path.join(prefix, new_key))
     return keys
+
+
+def get_object(key: str):
+
+    return client.get_object(Bucket=bucket.name, Key=key)

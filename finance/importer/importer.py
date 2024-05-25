@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
 
 from finance.models import Transaction, Account, TransactionMap, TransactionType
+from finance.s3_util import s3_util
 
 INFLOW = "INFLOW"
 OUTFLOW = "OUTFLOW"
@@ -195,6 +196,20 @@ def import_transactions_from_local_file(
             import_transaction_from_account(row, statement_source, month_start, month_end, user)
 
 
+def import_transactions_from_s3(
+    all_keys: list[str], statement_source: str, file_month: date, month_start: date, month_end: date, user: User
+):
+    
+    key = os.path.join("data", user.username, statement_source, f'{file_month.isoformat()}.csv')
+
+    if key in all_keys:
+        stream = s3_util.get_object(key)["Body"]
+        for row in stream.iter_lines():
+            import_transaction_from_account(row.decode().replace('"', '').split(','), statement_source, month_start, month_end, user)
+
+        stream.close()
+
+
 def import_transactions_from_source(statement_source: str, start: date, end: date, user: User):
 
     # delete all transactions for the month first
@@ -202,18 +217,19 @@ def import_transactions_from_source(statement_source: str, start: date, end: dat
         user=user, account__name=statement_source, date__range=(start, end)
     ).delete()
 
-    print(f"Deleted from {statement_source}: {deleted}")
+    # list all objects
+    all_keys = s3_util.get_s3_filenames(os.path.join("data", user.username, statement_source))
 
-    import_transactions_from_local_file(statement_source, start - relativedelta(months=1), start, end, user)
+    import_transactions_from_s3(all_keys, statement_source, start - relativedelta(months=1), start, end, user)
 
     loop_start = start
     while loop_start < end:
-        import_transactions_from_local_file(
-            statement_source, loop_start, loop_start, loop_start + relativedelta(months=1), user
+        import_transactions_from_s3(
+            all_keys, statement_source, loop_start, loop_start, loop_start + relativedelta(months=1), user
         )
         loop_start += relativedelta(months=1)
 
-    import_transactions_from_local_file(statement_source, end, start, end, user)
+    import_transactions_from_s3(all_keys, statement_source, end, start, end, user)
 
 
 def import_transactions(start: date, end: date, user: User):
