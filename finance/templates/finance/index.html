@@ -1,0 +1,17 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'finance/style.css' %}">
+    <title>{% block title %}Test{% endblock %}</title>
+    <link rel="icon" href="{% static 'finance/favicon.ico' %}">
+</head>
+
+<body>
+    <p>
+        User: {{ user.username }} Is Authenticated: {{ user.is_authenticated }}
+    </p>
+
+</body>
+</html>
