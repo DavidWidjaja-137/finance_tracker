@@ -33,4 +33,4 @@ class UpdateTransactionMapView(View):
             map.type = TransactionType.objects.get(id=transaction_type)
             map.save()
 
-        return HttpResponseRedirect("transaction_map")
+        return HttpResponseRedirect("/transaction_map")

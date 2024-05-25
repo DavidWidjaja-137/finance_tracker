@@ -47,4 +47,4 @@ class TransactionTypeView(LoginRequiredMixin, View):
                 category=TransactionCategory.objects.get(id=category),
             )
 
-        return HttpResponseRedirect("transaction_type")
+        return HttpResponseRedirect("/transaction_type")

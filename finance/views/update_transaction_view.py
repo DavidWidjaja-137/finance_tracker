@@ -44,4 +44,4 @@ class UpdateTransactionView(View):
             transaction.mapping = new_map
             transaction.save()
 
-        return HttpResponseRedirect("transaction")
+        return HttpResponseRedirect("/transaction")

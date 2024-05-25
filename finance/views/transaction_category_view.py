@@ -33,4 +33,4 @@ class TransactionCategoryView(LoginRequiredMixin, View):
         if name and description:
             TransactionCategory.objects.create(name=name, description=description)
 
-        return HttpResponseRedirect("transaction_category")
+        return HttpResponseRedirect("/transaction_category")
