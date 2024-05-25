@@ -30,9 +30,9 @@ class TransactionFileView(View):
 
         # check on S3 how many files are there
         keys = []
-        #if account:
+        # if account:
         #    keys = s3_util.get_s3_filenames(os.path.join("data", request.user.username, account))
-        #else:
+        # else:
         #    keys = []
 
         # filter the files according to the date range
@@ -64,4 +64,4 @@ class TransactionFileView(View):
             key = os.path.join("data", request.user.username, account, file_date + ".csv")
             s3_util.bucket.upload_fileobj(request.FILES["file_upload"].file, key)
 
-        return HttpResponseRedirect("/finance/transaction_file_downloader")
+        return HttpResponseRedirect("transaction_file_downloader")

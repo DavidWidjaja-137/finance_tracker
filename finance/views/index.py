@@ -9,4 +9,4 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    return render(request, "finance/index.html")
+    return HttpResponseRedirect("accounts/login")

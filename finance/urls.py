@@ -12,7 +12,7 @@ from finance.views import (
     ImportTransactionView,
     TransactionView,
     TransactionFileView,
-    SignUpView
+    SignUpView,
 )
 
 urlpatterns = [

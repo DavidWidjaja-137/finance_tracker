@@ -19,4 +19,4 @@ class ImportTransactionView(View):
 
         import_transactions(start, end, request.user)
 
-        return HttpResponseRedirect("/finance/transaction")
+        return HttpResponseRedirect("transaction")

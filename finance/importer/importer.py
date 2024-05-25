@@ -12,7 +12,14 @@ OUTFLOW = "OUTFLOW"
 
 
 def create_transaction(
-    d: date, month_start: date, month_end: date, transaction_name: str, account_name: str, amount: float, flow: str, user: User
+    d: date,
+    month_start: date,
+    month_end: date,
+    transaction_name: str,
+    account_name: str,
+    amount: float,
+    flow: str,
+    user: User,
 ):
 
     if month_start <= d < month_end:
@@ -29,7 +36,12 @@ def create_transaction(
             )
 
         Transaction.objects.get_or_create(
-            date=d, account=Account.objects.get(name=account_name), mapping=map, amount=abs(amount), flow=flow, user=user
+            date=d,
+            account=Account.objects.get(name=account_name),
+            mapping=map,
+            amount=abs(amount),
+            flow=flow,
+            user=user,
         )
 
 
@@ -58,7 +70,9 @@ def import_transaction_from_vancity_chequing(row: list[str], month_start: date, 
         amount = float(row[5])
         transaction_flow = INFLOW
 
-    create_transaction(date, month_start, month_end, transaction_name, "VANCITY_CHEQUING", amount, transaction_flow, user)
+    create_transaction(
+        date, month_start, month_end, transaction_name, "VANCITY_CHEQUING", amount, transaction_flow, user
+    )
 
 
 def import_transaction_from_vancity_savings(row: list[str], month_start: date, month_end: date, user: User):
@@ -76,7 +90,9 @@ def import_transaction_from_vancity_savings(row: list[str], month_start: date, m
         amount = 0.0
         transaction_flow = INFLOW
 
-    create_transaction(date, month_start, month_end, transaction_name, "VANCITY_SAVINGS", amount, transaction_flow, user)
+    create_transaction(
+        date, month_start, month_end, transaction_name, "VANCITY_SAVINGS", amount, transaction_flow, user
+    )
 
 
 def import_transaction_from_scotiabank_credit(row: list[str], month_start: date, month_end: date, user: User):
@@ -87,7 +103,9 @@ def import_transaction_from_scotiabank_credit(row: list[str], month_start: date,
 
     transaction_flow = OUTFLOW if amount < 0 else INFLOW
 
-    create_transaction(date, month_start, month_end, transaction_name, "SCOTIABANK_CREDIT", amount, transaction_flow, user)
+    create_transaction(
+        date, month_start, month_end, transaction_name, "SCOTIABANK_CREDIT", amount, transaction_flow, user
+    )
 
 
 def import_transaction_from_scotiabank_chequing(row: list[str], month_start: date, month_end: date, user: User):
@@ -98,7 +116,9 @@ def import_transaction_from_scotiabank_chequing(row: list[str], month_start: dat
 
     transaction_flow = OUTFLOW if amount < 0 else INFLOW
 
-    create_transaction(date, month_start, month_end, transaction_name, "SCOTIABANK_CHEQUING", amount, transaction_flow, user)
+    create_transaction(
+        date, month_start, month_end, transaction_name, "SCOTIABANK_CHEQUING", amount, transaction_flow, user
+    )
 
 
 def import_transaction_from_scotiabank_savings(row: list[str], month_start: date, month_end: date, user: User):
@@ -108,7 +128,9 @@ def import_transaction_from_scotiabank_savings(row: list[str], month_start: date
 
     transaction_flow = INFLOW if amount > 0 else OUTFLOW
 
-    create_transaction(date, month_start, month_end, transaction_name, "SCOTIABANK_CREDIT", amount, transaction_flow, user)
+    create_transaction(
+        date, month_start, month_end, transaction_name, "SCOTIABANK_CREDIT", amount, transaction_flow, user
+    )
 
 
 def import_transaction_from_credential_asset_management(row: list[str], month_start: date, month_end: date, user: User):
@@ -133,7 +155,9 @@ def import_transaction_from_ctfs_credit(row: list[str], month_start: date, month
     create_transaction(date, month_start, month_end, transaction_name, "CTFS_CREDIT", amount, transaction_flow, user)
 
 
-def import_transaction_from_account(row: list[str], statement_source: str, month_start: date, month_end: date, user: User):
+def import_transaction_from_account(
+    row: list[str], statement_source: str, month_start: date, month_end: date, user: User
+):
     if statement_source == "CTFS_CREDIT":
         return import_transaction_from_ctfs_credit(row, month_start, month_end, user)
     elif statement_source == "SCOTIABANK_CHEQUING":
@@ -154,7 +178,9 @@ def import_transaction_from_account(row: list[str], statement_source: str, month
         raise ValueError(f"{statement_source} does not exist")
 
 
-def import_transactions_from_local_file(statement_source: str, file_month: date, month_start: date, month_end: date, user: User):
+def import_transactions_from_local_file(
+    statement_source: str, file_month: date, month_start: date, month_end: date, user: User
+):
 
     prefix = os.path.join(os.path.dirname(__file__), "..", "..", "..", "data")
     suffix = f"{statement_source}/{file_month.isoformat()}.csv"
@@ -172,7 +198,9 @@ def import_transactions_from_local_file(statement_source: str, file_month: date,
 def import_transactions_from_source(statement_source: str, start: date, end: date, user: User):
 
     # delete all transactions for the month first
-    deleted, _ = Transaction.objects.filter(user=user, account__name=statement_source, date__range=(start, end)).delete()
+    deleted, _ = Transaction.objects.filter(
+        user=user, account__name=statement_source, date__range=(start, end)
+    ).delete()
 
     print(f"Deleted from {statement_source}: {deleted}")
 

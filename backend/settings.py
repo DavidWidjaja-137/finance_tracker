@@ -79,7 +79,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "backend.urls"
 
-LOGIN_REDIRECT_URL = "/finance/transaction"
+LOGIN_REDIRECT_URL = "transaction"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 TEMPLATES = [
@@ -128,7 +128,7 @@ else:
     }
 
 # the real thing.
-#DATABASES = {
+# DATABASES = {
 #    "default": {
 #        "ENGINE": "django.db.backends.postgresql",
 #        "OPTIONS": {
@@ -136,7 +136,7 @@ else:
 #            "passfile": ".pgpass",
 #        },
 #    }
-#}
+# }
 
 
 # Password validation

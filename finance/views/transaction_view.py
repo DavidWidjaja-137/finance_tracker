@@ -45,16 +45,14 @@ class TransactionView(View):
 
         if transaction_type and filter_start and filter_end:
             transactions = (
-                transaction_filter
-                .filter(user=request.user)
+                transaction_filter.filter(user=request.user)
                 .filter(mapping__type__name=transaction_type)
                 .filter(date__range=(filter_start, filter_end))
                 .all()
             )
         elif transaction_category and filter_start and filter_end:
             transactions = (
-                transaction_filter
-                .filter(user=request.user)
+                transaction_filter.filter(user=request.user)
                 .filter(mapping__type__category__name=transaction_category)
                 .filter(date__range=(filter_start, filter_end))
                 .all()

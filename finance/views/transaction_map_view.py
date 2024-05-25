@@ -83,4 +83,4 @@ class TransactionMapView(View):
                 type=TransactionType.objects.get(id=transaction_type),
             )
 
-        return HttpResponseRedirect("/finance/transaction_map")
+        return HttpResponseRedirect("transaction_map")
